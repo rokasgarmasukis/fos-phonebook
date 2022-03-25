@@ -18,11 +18,19 @@ const App = () => {
 
   const addPerson = (e, name, number) => {
     e.preventDefault();
-    if (persons.some((person) => person.name === name)) {
-      alert(`${name} is already added to phonebook`);
-      return;
-    }
     const newPerson = { name, number: parseInt(number) };
+    if (persons.some((person) => person.name === name)) {
+      const confirmation = window.confirm(`${name} is already added to phonebook. Do you want to replace the old number with a new one?`);
+      if (confirmation) {
+        const oldPerson = persons.find((person) => person.name === name)
+        newPerson.id = oldPerson.id
+        personService
+        .updatePerson(oldPerson.id, newPerson)
+        .then(updatedPerson => {
+          setPersons(persons.map(person => person.id === oldPerson.id ? updatedPerson : person))
+        })
+      } else return;
+    }
 
     personService.create(newPerson).then((person) => {
       setPersons(persons.concat(person));
