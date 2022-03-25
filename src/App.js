@@ -20,15 +20,21 @@ const App = () => {
     e.preventDefault();
     const newPerson = { name, number: parseInt(number) };
     if (persons.some((person) => person.name === name)) {
-      const confirmation = window.confirm(`${name} is already added to phonebook. Do you want to replace the old number with a new one?`);
+      const confirmation = window.confirm(
+        `${name} is already added to phonebook. Do you want to replace the old number with a new one?`
+      );
       if (confirmation) {
-        const oldPerson = persons.find((person) => person.name === name)
-        newPerson.id = oldPerson.id
+        const oldPerson = persons.find((person) => person.name === name);
+        newPerson.id = oldPerson.id;
         personService
-        .updatePerson(oldPerson.id, newPerson)
-        .then(updatedPerson => {
-          setPersons(persons.map(person => person.id === oldPerson.id ? updatedPerson : person))
-        })
+          .updatePerson(oldPerson.id, newPerson)
+          .then((updatedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id === oldPerson.id ? updatedPerson : person
+              )
+            );
+          });
       } else return;
     }
 
@@ -38,10 +44,10 @@ const App = () => {
   };
 
   const removePerson = (id) => {
-    personService.deletePerson(id).then(()=>{
-      setPersons(persons.filter(person => person.id !== id))
-    })
-  }
+    personService.deletePerson(id).then(() => {
+      setPersons(persons.filter((person) => person.id !== id));
+    });
+  };
 
   const personsToShow = persons.filter((person) =>
     person.name.toLowerCase().includes(search.toLowerCase())
@@ -55,9 +61,10 @@ const App = () => {
       <h2>Add new</h2>
       <PersonForm persons={persons} addPerson={addPerson} />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} handleDeletePerson={removePerson}/>
+      <Persons persons={personsToShow} handleDeletePerson={removePerson} />
     </div>
   );
 };
 
 export default App;
+
